@@ -1,0 +1,12 @@
+{
+  "name": "bulk-music-release-renamer",
+  "version": "1.0.0",
+  "description": "Add year prefix foreach each album. Folder must be like \"Artiste/Album/Song.ext\" or \"Artist/Album.ext\"",
+  "main": "index.js",
+  "author": "Bazaim",
+  "license": "WTFPL",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "prompt": "^1.0.0"
+  }
+}
