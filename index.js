@@ -6,7 +6,7 @@ new Config(
 	'Settings BulkMusicReleaseRenamer',
 	['path'],
 	true,
-	{ path: 'musics' }
+	{ path: './musics' }
 ).load(datas => {
 	new Job(datas).init(job => job.start());
 });

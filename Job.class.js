@@ -30,17 +30,17 @@ function Job(datas, force = false) {
 			throw new exception('Job not inited');
 		}
 
-		fs.readdir(`./${this.datas.path}`, (err, artists) => {
+		fs.readdir(`${this.datas.path}`, (err, artists) => {
 			if(!err && artists) {
 				artists.forEach(artist => {
-					fs.stat(`./${this.datas.path}/${artist}`, (err, statsArtist) => {
+					fs.stat(`${this.datas.path}/${artist}`, (err, statsArtist) => {
 						if (statsArtist.isDirectory()) {
-							fs.readdir(`./${this.datas.path}/${artist}`, (err, albums) => {
+							fs.readdir(`${this.datas.path}/${artist}`, (err, albums) => {
 								if(!err && albums) {
 									albums.forEach(album => {
-										fs.stat(`./${this.datas.path}/${artist}/${album}`, (err, statsAlbum) => {
+										fs.stat(`${this.datas.path}/${artist}/${album}`, (err, statsAlbum) => {
 											this.queue.push({
-												path: `./${this.datas.path}/${artist}/${album}`,
+												path: `${this.datas.path}/${artist}/${album}`,
 												artist,
 												album: statsAlbum.isDirectory()
 													? album
@@ -80,8 +80,15 @@ function Job(datas, force = false) {
 							if (response.data.releases.length) {
 								const year = new Date(response.data.releases[0].date).getFullYear();
 								let newPath = item.path.split(/[\\/]+/);
-								newPath[newPath.length-1] = `${year} - ${response.data.releases[0].title}`;
+
+								newPath[newPath.length-1] = isNaN(year)
+									? `${response.data.releases[0].title}`
+									: `${year} - ${response.data.releases[0].title}`;
 								
+								if (!item.isDirectory) {
+									newPath[newPath.length-1] += '.' + item.path.split('.').pop();
+								}
+									
 								fs.rename(item.path, newPath.join('/'), () => {
 									this.doingQueue = false;
 									this.doQueue();
